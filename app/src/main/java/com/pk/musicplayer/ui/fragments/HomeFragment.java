@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pk.musicplayer.R;
 import com.pk.musicplayer.adapters.SongListAdapter;
+import com.pk.musicplayer.helper.PermissionHelper;
 import com.pk.musicplayer.models.Song;
 import com.pk.musicplayer.viewmodels.SongListViewModel;
 
@@ -45,6 +46,9 @@ public class HomeFragment extends Fragment {
 
         // Init recycler view layout
         initSongListRecyclerView();
+
+        // Check permissions
+        PermissionHelper.checkPermission(view, this);
 
         // Init view model
         initSongListViewModel();
