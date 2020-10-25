@@ -1,13 +1,22 @@
 package com.pk.musicplayer.repositories;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
+import com.pk.musicplayer.application.MyApplication;
 import com.pk.musicplayer.models.Song;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SongRepository {
 
+    private static final String TAG = "SongRepository";
     private static SongRepository instance;
     MutableLiveData<List<Song>> mSongs = new MutableLiveData<>();
 
@@ -26,7 +35,68 @@ public class SongRepository {
 
     public MutableLiveData<List<Song>> getSongs() {
         // Fetch from content provider
-
+        mSongs.setValue(getAllSongs());
         return mSongs;
     }
+
+    /**
+     * This method fetches music files on external storage
+     * Using content resolver
+     *
+     * @return List<> of type Song data class
+     */
+    private List<Song> getAllSongs() {
+        List<Song> mSongList = new ArrayList<>();
+
+        // Get handle to ContentResolver
+        ContentResolver contentResolver = MyApplication.getContext().getContentResolver();
+
+        // Get External Media URI
+        Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+
+
+
+        /* SELECTION CRITERIA START */
+
+        // Get Audio Track name
+        String[] projection = new String[]{MediaStore.Audio.Media.DISPLAY_NAME};
+
+        // Select only music files
+        String selectionClause = MediaStore.Audio.Media.IS_MUSIC + " = ?";
+
+        // MediaStore.Audio.Media.IS_MUSIC returns 1 for music
+        String[] selectionArgs = new String[]{"1"};
+
+        // Order fetched data by display name
+        String orderBy = MediaStore.Audio.Media.DISPLAY_NAME;
+
+        /* SELECTION CRITERIA END */
+
+
+        Cursor musicCursor = contentResolver.query(
+                musicUri,
+                projection, // The columns to return for each row
+                selectionClause, // Selection criteria
+                selectionArgs, // Selection criteria to match
+                orderBy); // The sort order for the returned rows
+
+        if (musicCursor != null && musicCursor.getCount() > 0) {
+            while (musicCursor.moveToNext()) {
+
+                String songTitle = musicCursor.getString(
+                        musicCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
+
+                // Add song name to list
+                mSongList.add(new Song(songTitle));
+
+            }
+        }
+
+        if (musicCursor != null)
+            musicCursor.close();
+
+        Log.e(TAG, "getAllSongs: Triggered");
+
+        return mSongList;
+    } //TODO: Request access to internal storage
 }

@@ -32,7 +32,9 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull SongListViewHolder holder, int position) {
-        holder.bindTo();
+        Song currentSong = mSongs.get(position);
+
+        holder.bindTo(currentSong);
     }
 
     @Override

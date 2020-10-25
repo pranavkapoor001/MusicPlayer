@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pk.musicplayer.R;
+import com.pk.musicplayer.models.Song;
 
 public class SongListViewHolder extends RecyclerView.ViewHolder {
 
@@ -19,6 +20,7 @@ public class SongListViewHolder extends RecyclerView.ViewHolder {
         tvSongTitle = itemView.findViewById(R.id.item_song_title);
     }
 
-    public void bindTo() {
+    public void bindTo(Song currentSong) {
+        tvSongTitle.setText(currentSong.getSongTitle());
     }
 }
