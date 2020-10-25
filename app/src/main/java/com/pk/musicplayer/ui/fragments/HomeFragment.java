@@ -43,11 +43,11 @@ public class HomeFragment extends Fragment {
         // Find views
         mSongListRecyclerView = view.findViewById(R.id.song_list_recycler);
 
-        // Init view model
-        initSongListViewModel();
-
         // Init recycler view layout
         initSongListRecyclerView();
+
+        // Init view model
+        initSongListViewModel();
 
     }
 
@@ -57,14 +57,12 @@ public class HomeFragment extends Fragment {
     public void initSongListViewModel() {
         mSongListViewModel = ViewModelProviders.of(this).get(SongListViewModel.class);
 
-        /* Populate all songs list data
-         * Fetched from content provider
-         */
-        mSongListViewModel.init();
-
         mSongListViewModel.getSongs().observe(this, new Observer<List<Song>>() {
             @Override
             public void onChanged(List<Song> songs) {
+
+                // Pass songs list to SongsListAdapter
+                mSongListAdapter.setSongs(songs);
 
                 // Update recycler view when Song class data changes
                 mSongListAdapter.notifyDataSetChanged();
@@ -73,9 +71,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void initSongListRecyclerView() {
-        // Pass context and List<Song> to recycler view
-        mSongListAdapter = new SongListAdapter(getContext(),
-                mSongListViewModel.getSongs().getValue());
+        mSongListAdapter = new SongListAdapter();
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         mSongListRecyclerView.setLayoutManager(layoutManager);
         mSongListRecyclerView.setAdapter(mSongListAdapter);

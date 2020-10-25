@@ -20,6 +20,7 @@ public class SongListViewModel extends ViewModel {
 
     // Used by observer
     public LiveData<List<Song>> getSongs() {
+        init();
         return mSongs;
     }
 
