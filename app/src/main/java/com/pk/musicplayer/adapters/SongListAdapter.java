@@ -9,13 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pk.musicplayer.R;
+import com.pk.musicplayer.models.Song;
+
+import java.util.List;
 
 public class SongListAdapter extends RecyclerView.Adapter<SongListViewHolder> {
 
+    List<Song> mSongs;
     private Context mContext;
 
-    public SongListAdapter(Context context) {
+    public SongListAdapter(Context context, List<Song> songs) {
         mContext = context;
+        mSongs = songs;
     }
 
     @NonNull
@@ -32,6 +37,6 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mSongs.size();
     }
 }
