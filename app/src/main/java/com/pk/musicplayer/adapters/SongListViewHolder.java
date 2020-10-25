@@ -1,7 +1,6 @@
 package com.pk.musicplayer.adapters;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,10 +11,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pk.musicplayer.R;
 import com.pk.musicplayer.models.Song;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class SongListViewHolder extends RecyclerView.ViewHolder {
 
-    TextView tvSongTitle;
-    ImageView ivAlbumArt;
+    private TextView tvSongTitle;
+    private CircleImageView ivAlbumArt;
 
     public SongListViewHolder(@NonNull View itemView) {
         super(itemView);

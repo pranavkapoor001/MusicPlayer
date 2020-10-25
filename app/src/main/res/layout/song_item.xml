@@ -6,7 +6,7 @@
     android:layout_margin="16dp"
     android:padding="15dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/item_song_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
