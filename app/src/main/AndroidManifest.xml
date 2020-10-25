@@ -19,6 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.pk.musicplayer.helper.GlideModule"
+            android:value="AppGlideModule" />
+
     </application>
 
 </manifest>

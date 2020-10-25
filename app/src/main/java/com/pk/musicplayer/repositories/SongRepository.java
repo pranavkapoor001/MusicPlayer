@@ -1,6 +1,7 @@
 package com.pk.musicplayer.repositories;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -55,11 +56,11 @@ public class SongRepository {
         Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
 
-
         /* SELECTION CRITERIA START */
 
         // Get Audio Track name
-        String[] projection = new String[]{MediaStore.Audio.Media.DISPLAY_NAME};
+        String[] projection = new String[]{MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.ALBUM_ID};
 
         // Select only music files
         String selectionClause = MediaStore.Audio.Media.IS_MUSIC + " = ?";
@@ -68,7 +69,7 @@ public class SongRepository {
         String[] selectionArgs = new String[]{"1"};
 
         // Order fetched data by display name
-        String orderBy = MediaStore.Audio.Media.DISPLAY_NAME;
+        String orderBy = MediaStore.Audio.Media.TITLE;
 
         /* SELECTION CRITERIA END */
 
@@ -84,10 +85,19 @@ public class SongRepository {
             while (musicCursor.moveToNext()) {
 
                 String songTitle = musicCursor.getString(
-                        musicCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
+                        musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+
+                // Get id to concatenate with alarmArt folder path
+                long albumId = musicCursor.getLong(
+                        musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+
+                // Get path for albumArt
+                Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
+                Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
+
 
                 // Add song name to list
-                mSongList.add(new Song(songTitle));
+                mSongList.add(new Song(songTitle, albumArtUri));
 
             }
         }
