@@ -24,6 +24,17 @@
             android:name="com.pk.musicplayer.helper.GlideModule"
             android:value="AppGlideModule" />
 
+        <!-- Music Playback Service Components -->
+
+        <service
+            android:name=".services.MusicService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
