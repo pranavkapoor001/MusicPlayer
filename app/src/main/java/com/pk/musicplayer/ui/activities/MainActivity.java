@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pk.musicplayer.R;
 import com.pk.musicplayer.helper.MediaBrowserClientHelper;
+import com.pk.musicplayer.ui.fragments.BottomMediaControllerFragment;
 import com.pk.musicplayer.ui.fragments.HomeFragment;
 import com.pk.musicplayer.ui.fragments.NowPlayingFragment;
 import com.pk.musicplayer.ui.fragments.SearchFragment;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
 
     private BottomNavigationView bottomNavigationView;
     private MediaBrowserClientHelper mediaBrowserClientHelper;
+    private boolean mIsPlaying;
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -93,5 +95,39 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
     @Override
     public void onMediaSelected(Uri mediaUri) {
         mediaBrowserClientHelper.getTransportControls().playFromUri(mediaUri, null);
+        mIsPlaying = true;
+
+        getBottomMediaController().setIsPlaying(true);
+        getBottomMediaController().setMediaTitle("Playing Song");
+
+    }
+
+
+    //------------------------------- Bottom Media Controller ------------------------------------//
+
+    private BottomMediaControllerFragment getBottomMediaController() {
+        return (BottomMediaControllerFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.bottom_media_controller);
+    }
+
+    @Override
+    public void playPause() {
+        if (mIsPlaying) {
+            // pause the playback
+            mediaBrowserClientHelper.getTransportControls().pause();
+
+            // show play button
+            getBottomMediaController().setIsPlaying(false);
+
+            mIsPlaying = false;
+        } else {
+            // resume playback
+            mediaBrowserClientHelper.getTransportControls().play();
+
+            // show pause button
+            getBottomMediaController().setIsPlaying(true);
+
+            mIsPlaying = true;
+        }
     }
 }
