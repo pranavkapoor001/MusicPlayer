@@ -1,6 +1,7 @@
 package com.pk.musicplayer.services;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.media.MediaBrowserServiceCompat;
+import androidx.media.session.MediaButtonReceiver;
 
 import com.pk.musicplayer.adapters.ExoPlayerAdapter;
 import com.pk.musicplayer.helper.MediaNotificationHelper;
@@ -43,6 +45,12 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         // Create notification channel
         mediaNotificationHelper = new MediaNotificationHelper(this);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        MediaButtonReceiver.handleIntent(mediaSession, intent);
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -118,6 +126,13 @@ public class MusicService extends MediaBrowserServiceCompat {
          * MediaSessionCallbacks has methods that handle callbacks from a media controller
          */
         mediaSession.setCallback(new MediaSessionCallbacks());
+
+        // Set media button receiver intent
+        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        mediaButtonIntent.setClass(this, MediaButtonReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
+                mediaButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mediaSession.setMediaButtonReceiver(pendingIntent);
 
         // A token that will be used to create a MediaController for this session
         setSessionToken(mediaSession.getSessionToken());
@@ -203,6 +218,10 @@ public class MusicService extends MediaBrowserServiceCompat {
         public void onPlay() {
             super.onPlay();
 
+            // Set the session active
+            mediaSession.setActive(true);
+
+            // Start playback
             exoPlayerAdapter.play();
 
             // Set playback state
@@ -226,6 +245,9 @@ public class MusicService extends MediaBrowserServiceCompat {
         @Override
         public void onStop() {
             super.onStop();
+
+            // Set the session inactive
+            mediaSession.setActive(false);
 
             stopMusicService();
         }
