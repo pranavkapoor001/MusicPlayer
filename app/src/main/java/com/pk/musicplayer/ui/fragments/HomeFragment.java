@@ -57,6 +57,11 @@ public class HomeFragment extends Fragment {
     public void initSongListViewModel() {
         mSongListViewModel = ViewModelProviders.of(this).get(SongListViewModel.class);
 
+        /* Populate all songs list data
+         * Fetched from content provider
+         */
+        mSongListViewModel.init();
+
         mSongListViewModel.getSongs().observe(this, new Observer<List<Song>>() {
             @Override
             public void onChanged(List<Song> songs) {
