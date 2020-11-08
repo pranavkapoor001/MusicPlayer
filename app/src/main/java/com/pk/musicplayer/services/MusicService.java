@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.media.MediaBrowserServiceCompat;
 
+import com.pk.musicplayer.adapters.ExoPlayerAdapter;
 import com.pk.musicplayer.helper.MediaNotificationHelper;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class MusicService extends MediaBrowserServiceCompat {
     // Media Components
     private MediaSessionCompat mediaSession;
     private PlaybackStateCompat.Builder playbackStateBuilder;
+    private ExoPlayerAdapter exoPlayerAdapter;
 
 
     //-------------------------------------Lifecycle methods--------------------------------------//
@@ -120,6 +122,9 @@ public class MusicService extends MediaBrowserServiceCompat {
         // A token that will be used to create a MediaController for this session
         setSessionToken(mediaSession.getSessionToken());
 
+        // Init ExoPlayer
+        exoPlayerAdapter = new ExoPlayerAdapter(this);
+
     }
 
 
@@ -169,6 +174,8 @@ public class MusicService extends MediaBrowserServiceCompat {
         public void onPlayFromUri(Uri uri, Bundle extras) {
             super.onPlayFromUri(uri, extras);
 
+            exoPlayerAdapter.playFromUri(uri);
+
             // Start playback
             onPlay();
         }
@@ -176,6 +183,8 @@ public class MusicService extends MediaBrowserServiceCompat {
         @Override
         public void onPlay() {
             super.onPlay();
+
+            exoPlayerAdapter.play();
 
             // Start foreground service, show notification
             showNotification();
@@ -185,11 +194,15 @@ public class MusicService extends MediaBrowserServiceCompat {
         @Override
         public void onPause() {
             super.onPause();
+
+            exoPlayerAdapter.pause();
         }
 
         @Override
         public void onStop() {
             super.onStop();
+
+            exoPlayerAdapter.stop();
 
             stopMusicService();
         }

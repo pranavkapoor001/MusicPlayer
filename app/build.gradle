@@ -20,6 +20,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -52,5 +56,8 @@ dependencies {
 
     // Androidx Media
     implementation "androidx.media:media:1.2.0"
+
+    // ExoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.12.1'
 
 }
