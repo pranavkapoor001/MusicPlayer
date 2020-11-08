@@ -1,5 +1,6 @@
 package com.pk.musicplayer.services;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,7 +10,10 @@ import android.support.v4.media.session.PlaybackStateCompat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.media.MediaBrowserServiceCompat;
+
+import com.pk.musicplayer.helper.MediaNotificationHelper;
 
 import java.util.List;
 
@@ -17,6 +21,10 @@ public class MusicService extends MediaBrowserServiceCompat {
 
     // vars
     private static final String TAG = "MusicService";
+    private static final int NOTIFICATION_ID = 101;
+    private MediaNotificationHelper mediaNotificationHelper;
+    private boolean mIsServiceStarted;
+
     // Media Components
     private MediaSessionCompat mediaSession;
     private PlaybackStateCompat.Builder playbackStateBuilder;
@@ -28,7 +36,11 @@ public class MusicService extends MediaBrowserServiceCompat {
     public void onCreate() {
         super.onCreate();
 
+        // Create Media Session
         initMediaSession();
+
+        // Create notification channel
+        mediaNotificationHelper = new MediaNotificationHelper(this);
     }
 
     @Override
@@ -36,7 +48,7 @@ public class MusicService extends MediaBrowserServiceCompat {
         super.onTaskRemoved(rootIntent);
 
         // Stop service
-        stopSelf();
+        stopMusicService();
     }
 
     @Override
@@ -46,6 +58,7 @@ public class MusicService extends MediaBrowserServiceCompat {
         // Release resources held by media session
         mediaSession.release();
     }
+
 
     // --------------------- Necessary overridden methods --------------------- //
 
@@ -79,6 +92,7 @@ public class MusicService extends MediaBrowserServiceCompat {
 
     }
 
+
     //--------------------------------- Initialize Media Session ---------------------------------//
 
     private void initMediaSession() {
@@ -109,6 +123,37 @@ public class MusicService extends MediaBrowserServiceCompat {
     }
 
 
+    //---------------------------------- Misc Methods --------------------------------------------//
+
+    /* This method shows media notification
+     * And starts foreground service if not already started
+     */
+    private void showNotification() {
+        Notification notification =
+                mediaNotificationHelper.buildNotification(mediaSession.getController());
+
+        // Start service if not already started
+        if (!mIsServiceStarted) {
+            ContextCompat.startForegroundService(MusicService.this,
+                    new Intent(MusicService.this, MusicService.class));
+
+            mIsServiceStarted = true;
+        }
+
+        startForeground(NOTIFICATION_ID, notification);
+    }
+
+    // This method completely stops the service
+    private void stopMusicService() {
+        // Stop foreground service and remove notification
+        stopForeground(true);
+
+        stopSelf();
+
+        mIsServiceStarted = false;
+    }
+
+
     //---------------------------------- MediaSessionCallbacks -----------------------------------//
 
     /*
@@ -119,20 +164,34 @@ public class MusicService extends MediaBrowserServiceCompat {
      * (This is where we control the player play(), pause())
      */
 
-    private static class MediaSessionCallbacks extends MediaSessionCompat.Callback {
+    private class MediaSessionCallbacks extends MediaSessionCompat.Callback {
         @Override
         public void onPlayFromUri(Uri uri, Bundle extras) {
             super.onPlayFromUri(uri, extras);
+
+            // Start playback
+            onPlay();
         }
 
         @Override
         public void onPlay() {
             super.onPlay();
+
+            // Start foreground service, show notification
+            showNotification();
+
         }
 
         @Override
         public void onPause() {
             super.onPause();
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+
+            stopMusicService();
         }
     }
 }

@@ -50,4 +50,7 @@ dependencies {
     //Circle ImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    // Androidx Media
+    implementation "androidx.media:media:1.2.0"
+
 }
