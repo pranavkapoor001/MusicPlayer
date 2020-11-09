@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pk.musicplayer.R;
+import com.pk.musicplayer.helper.MediaBrowserClientHelper;
 import com.pk.musicplayer.ui.fragments.HomeFragment;
 import com.pk.musicplayer.ui.fragments.NowPlayingFragment;
 import com.pk.musicplayer.ui.fragments.SearchFragment;
@@ -16,6 +17,7 @@ import com.pk.musicplayer.ui.fragments.SearchFragment;
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
+    private MediaBrowserClientHelper mediaBrowserClientHelper;
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -49,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
+    //-------------------------------------Lifecycle methods--------------------------------------//
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,5 +68,24 @@ public class MainActivity extends AppCompatActivity {
         // Launch Home fragment by default
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new HomeFragment()).commit();
+
+        // Create MediaBrowserCompat
+        mediaBrowserClientHelper = new MediaBrowserClientHelper(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Connect to MediaBrowser
+        mediaBrowserClientHelper.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Disconnect from MediaBrowser
+        mediaBrowserClientHelper.onStop();
     }
 }
