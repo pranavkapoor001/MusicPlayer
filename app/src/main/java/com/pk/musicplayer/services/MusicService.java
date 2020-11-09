@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.media.MediaBrowserServiceCompat;
 
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.pk.musicplayer.adapters.ExoPlayerAdapter;
 import com.pk.musicplayer.helper.MediaNotificationHelper;
 
@@ -30,6 +31,7 @@ public class MusicService extends MediaBrowserServiceCompat {
     private MediaSessionCompat mediaSession;
     private PlaybackStateCompat.Builder playbackStateBuilder;
     private ExoPlayerAdapter exoPlayerAdapter;
+    private MediaSessionConnector mediaSessionConnector;
 
 
     //-------------------------------------Lifecycle methods--------------------------------------//
@@ -59,6 +61,7 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         // Release resources held by media session
         mediaSession.release();
+        mediaSessionConnector.setPlayer(null);
     }
 
 
@@ -124,6 +127,13 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         // Init ExoPlayer
         exoPlayerAdapter = new ExoPlayerAdapter(this);
+
+        /* Connect ExoPlayer with media session
+         * Currently not listening for any media actions sent by media session's controller
+         * Useless for now, but keep it here so I don't forget about this ExoPlayer extension
+         */
+        mediaSessionConnector = new MediaSessionConnector(mediaSession);
+        mediaSessionConnector.setPlayer(exoPlayerAdapter.getPlayer());
 
     }
 

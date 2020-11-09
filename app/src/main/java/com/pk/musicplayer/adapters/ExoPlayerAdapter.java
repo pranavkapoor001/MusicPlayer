@@ -25,6 +25,13 @@ public class ExoPlayerAdapter {
             exoPlayer = new SimpleExoPlayer.Builder(mContext).build();
     }
 
+    public SimpleExoPlayer getPlayer() {
+        return exoPlayer;
+    }
+
+
+    //--------------------------------- Playback Helpers -----------------------------------------//
+
     public void playFromUri(Uri uri) {
 
         MediaItem mediaItem = MediaItem.fromUri(uri);
