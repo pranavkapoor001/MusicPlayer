@@ -15,13 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pk.musicplayer.R;
 import com.pk.musicplayer.adapters.SongListAdapter;
+import com.pk.musicplayer.adapters.SongListViewHolder;
 import com.pk.musicplayer.helper.PermissionHelper;
 import com.pk.musicplayer.models.Song;
 import com.pk.musicplayer.viewmodels.SongListViewModel;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SongListViewHolder.IMediaSelector {
 
     private RecyclerView mSongListRecyclerView;
     private SongListViewModel mSongListViewModel;
@@ -75,10 +76,15 @@ public class HomeFragment extends Fragment {
     }
 
     private void initSongListRecyclerView() {
-        mSongListAdapter = new SongListAdapter();
+        mSongListAdapter = new SongListAdapter(this);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         mSongListRecyclerView.setLayoutManager(layoutManager);
         mSongListRecyclerView.setAdapter(mSongListAdapter);
+    }
+
+    @Override
+    public void onMediaSelected(int position) {
+
     }
 }

@@ -13,17 +13,24 @@ import com.pk.musicplayer.models.Song;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SongListViewHolder extends RecyclerView.ViewHolder {
+public class SongListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    // UI Components
     private TextView tvSongTitle;
     private CircleImageView ivAlbumArt;
 
-    public SongListViewHolder(@NonNull View itemView) {
+    // vars
+    private IMediaSelector mIMediaSelector;
+
+    public SongListViewHolder(@NonNull View itemView, IMediaSelector iMediaSelector) {
         super(itemView);
 
         // find views
         tvSongTitle = itemView.findViewById(R.id.item_song_title);
         ivAlbumArt = itemView.findViewById(R.id.item_song_img);
+
+        // Set IMediaSelector listener
+        mIMediaSelector = iMediaSelector;
     }
 
     public void bindTo(Song currentSong) {
@@ -34,5 +41,14 @@ public class SongListViewHolder extends RecyclerView.ViewHolder {
                 .placeholder(R.drawable.ic_music)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(ivAlbumArt);
+    }
+
+    @Override
+    public void onClick(View v) {
+        mIMediaSelector.onMediaSelected(getAdapterPosition());
+    }
+
+    public interface IMediaSelector {
+        void onMediaSelected(int position);
     }
 }

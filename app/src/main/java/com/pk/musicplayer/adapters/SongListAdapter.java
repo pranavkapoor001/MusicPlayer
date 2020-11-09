@@ -17,6 +17,11 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListViewHolder> {
 
     List<Song> mSongs;
     private Context mContext;
+    private SongListViewHolder.IMediaSelector mIMediaSelector;
+
+    public SongListAdapter(SongListViewHolder.IMediaSelector iMediaSelector) {
+        mIMediaSelector = iMediaSelector;
+    }
 
     public void setSongs(List<Song> songs) {
         mSongs = songs;
@@ -29,7 +34,7 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListViewHolder> {
         mContext = parent.getContext();
 
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.song_item, parent, false);
-        return new SongListViewHolder(itemView);
+        return new SongListViewHolder(itemView, mIMediaSelector);
     }
 
     @Override
