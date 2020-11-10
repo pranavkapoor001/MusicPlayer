@@ -153,6 +153,9 @@ public class MusicService extends MediaBrowserServiceCompat {
         // Stop foreground service and remove notification
         stopForeground(true);
 
+        // Stop playback and release exoplayer
+        exoPlayerAdapter.stop();
+
         stopSelf();
 
         mIsServiceStarted = false;
@@ -201,8 +204,6 @@ public class MusicService extends MediaBrowserServiceCompat {
         @Override
         public void onStop() {
             super.onStop();
-
-            exoPlayerAdapter.stop();
 
             stopMusicService();
         }
