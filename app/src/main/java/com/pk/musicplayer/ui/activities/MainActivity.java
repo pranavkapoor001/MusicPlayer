@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pk.musicplayer.R;
@@ -35,12 +37,19 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
             switch (item.getItemId()) {
                 case R.id.nav_home:
                     selectedFragment = new HomeFragment();
+                    showHideBottomMediaFragment(true);
                     break;
                 case R.id.nav_nowPlaying:
                     selectedFragment = new NowPlayingFragment();
+
+                    /* Hide the Bottom Media Fragment when NowPlaying(Fav)
+                     * Fragment is open
+                     */
+                    showHideBottomMediaFragment(false);
                     break;
                 case R.id.nav_search:
                     selectedFragment = new SearchFragment();
+                    showHideBottomMediaFragment(true);
                     break;
 
                 default:
@@ -79,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
         mediaBrowserClientHelper = new MediaBrowserClientHelper(this);
 
         mNowPlayingViewModel = NowPlayingViewModel.getInstance(this);
+
+        // Add Bottom Media Fragment dynamically
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.bottom_media_controller_container, new BottomMediaControllerFragment())
+                .commit();
     }
 
     @Override
@@ -119,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
 
     private BottomMediaControllerFragment getBottomMediaController() {
         return (BottomMediaControllerFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.bottom_media_controller);
+                .findFragmentById(R.id.bottom_media_controller_container);
     }
 
     @Override
@@ -146,6 +160,23 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
             mNowPlayingViewModel.setIsPlaying(true);
 
             mIsPlaying = true;
+        }
+    }
+
+    private void showHideBottomMediaFragment(boolean showFragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        // Check if fragment is present
+        BottomMediaControllerFragment bottomMediaFragment =
+                (BottomMediaControllerFragment) fragmentManager
+                        .findFragmentById(R.id.bottom_media_controller_container);
+
+        if (bottomMediaFragment != null) {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            if (showFragment)
+                fragmentTransaction.show(bottomMediaFragment);
+            else
+                fragmentTransaction.hide(bottomMediaFragment);
+            fragmentTransaction.commit();
         }
     }
 }
