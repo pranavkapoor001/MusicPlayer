@@ -13,9 +13,7 @@ import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.textview.MaterialTextView;
@@ -80,7 +78,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         mContext = context;
         mIMainActivity = (IMainActivity) getActivity();
 
-        if (context instanceof Activity)
+        if (context instanceof MainActivity)
             mActivity = (MainActivity) context;
     }
 
@@ -117,7 +115,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
          * See: https://developer.android.com/topic/libraries/architecture/viewmodel.html#sharing
          */
         final NowPlayingViewModel mNowPlayingViewModel =
-                ViewModelProviders.of((FragmentActivity) mActivity).get(NowPlayingViewModel.class);
+                NowPlayingViewModel.getInstance((MainActivity) mActivity);
 
         // Setup observer for play/pause state
         mNowPlayingViewModel.getIsPlaying().observe(this, new Observer<Boolean>() {

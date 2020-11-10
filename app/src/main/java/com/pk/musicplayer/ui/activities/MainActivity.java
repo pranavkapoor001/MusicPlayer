@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pk.musicplayer.R;
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
         // Create MediaBrowserCompat
         mediaBrowserClientHelper = new MediaBrowserClientHelper(this);
 
-        mNowPlayingViewModel = ViewModelProviders.of(this).get(NowPlayingViewModel.class);
+        mNowPlayingViewModel = NowPlayingViewModel.getInstance(this);
     }
 
     @Override
