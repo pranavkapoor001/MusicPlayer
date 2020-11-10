@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 import android.util.Size;
 
@@ -23,6 +25,12 @@ public class SongRepository {
     private static final String TAG = "SongRepository";
     private static SongRepository instance;
     MutableLiveData<List<Song>> mSongs = new MutableLiveData<>();
+    private List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+
+    // Media Item vars
+    private String songTitle, songId;
+    private Bitmap thumbnail;
+    private Uri contentUri;
 
     /**
      * Singleton pattern:
@@ -87,29 +95,43 @@ public class SongRepository {
         if (musicCursor != null && musicCursor.getCount() > 0) {
             while (musicCursor.moveToNext()) {
 
-                String songTitle = musicCursor.getString(
+                songTitle = musicCursor.getString(
                         musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
 
                 // Get id to concatenate with alarmArt folder path
-                String id = musicCursor.getString(
+                songId = musicCursor.getString(
                         musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
 
                 // Get path for actual media file
-                Uri contentUri = ContentUris.withAppendedId(
-                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.parseLong(id));
+                contentUri = ContentUris.withAppendedId(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.parseLong(songId));
 
                 // Load Media thumbnail
-                Bitmap thumbnail = null;
                 try {
+
+                    /* Set null, otherwise if loadThumbnail() fails
+                     * Thumbnail from previous iteration(song) may be used (globally initialized var)
+                     */
+                    thumbnail = null;
+
+                    // load thumbnail
                     thumbnail = contentResolver.loadThumbnail(contentUri,
                             new Size(640, 480), null);
                 } catch (IOException ignored) {
                     // No thumbnail found
-                } finally {
-                    // Add song to list
-                    mSongList.add(new Song(songTitle, thumbnail, contentUri));
                 }
 
+                // Add song to list
+                mSongList.add(new Song(songTitle, thumbnail, contentUri));
+
+                // Build Metadata
+                MediaMetadataCompat metadata = getMetadata();
+
+                // Add to MediaItem list
+                mediaItems.add(musicCursor.getPosition(),
+                        new MediaBrowserCompat.MediaItem(
+                                metadata.getDescription(),
+                                MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
             }
         }
 
@@ -120,4 +142,23 @@ public class SongRepository {
 
         return mSongList;
     } //TODO: Request access to internal storage
+
+
+    //--------------------------- Get MetaData Object --------------------------------------------//
+
+    private MediaMetadataCompat getMetadata() {
+
+        MediaMetadataCompat metadata = new MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songTitle)
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, songId)
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, String.valueOf(contentUri))
+                .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, thumbnail)
+                .build();
+
+        return metadata;
+    }
+
+    public List<MediaBrowserCompat.MediaItem> getMediaItems() {
+        return mediaItems;
+    }
 }
