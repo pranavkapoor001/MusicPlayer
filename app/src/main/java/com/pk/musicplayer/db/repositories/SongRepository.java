@@ -1,4 +1,4 @@
-package com.pk.musicplayer.repositories;
+package com.pk.musicplayer.db.repositories;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -14,7 +14,7 @@ import android.util.Size;
 import androidx.lifecycle.MutableLiveData;
 
 import com.pk.musicplayer.application.MyApplication;
-import com.pk.musicplayer.models.Song;
+import com.pk.musicplayer.db.models.Song;
 
 import java.io.IOException;
 import java.util.ArrayList;

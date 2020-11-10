@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pk.musicplayer.R;
-import com.pk.musicplayer.adapters.SongListAdapter;
-import com.pk.musicplayer.adapters.SongListViewHolder;
+import com.pk.musicplayer.adapters.ui.SongListAdapter;
+import com.pk.musicplayer.adapters.ui.SongListViewHolder;
+import com.pk.musicplayer.db.models.Song;
 import com.pk.musicplayer.helper.PermissionHelper;
-import com.pk.musicplayer.models.Song;
 import com.pk.musicplayer.ui.activities.IMainActivity;
-import com.pk.musicplayer.viewmodels.SongListViewModel;
+import com.pk.musicplayer.ui.viewmodels.SongListViewModel;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.pk.musicplayer.viewmodels;
+package com.pk.musicplayer.ui.viewmodels;
 
 import android.app.Activity;
 import android.support.v4.media.MediaBrowserCompat;

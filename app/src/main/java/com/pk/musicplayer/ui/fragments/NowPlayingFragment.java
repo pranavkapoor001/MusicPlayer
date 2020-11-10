@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.textview.MaterialTextView;
 import com.pk.musicplayer.R;
 import com.pk.musicplayer.ui.activities.IMainActivity;
-import com.pk.musicplayer.viewmodels.NowPlayingViewModel;
+import com.pk.musicplayer.ui.viewmodels.NowPlayingViewModel;
 
 public class NowPlayingFragment extends Fragment implements View.OnClickListener {
 

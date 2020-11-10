@@ -1,4 +1,4 @@
-package com.pk.musicplayer.adapters;
+package com.pk.musicplayer.adapters.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pk.musicplayer.R;
-import com.pk.musicplayer.models.Song;
+import com.pk.musicplayer.db.models.Song;
 
 import java.util.List;
 

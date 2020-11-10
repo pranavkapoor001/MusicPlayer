@@ -1,4 +1,4 @@
-package com.pk.musicplayer.models;
+package com.pk.musicplayer.db.models;
 
 // Song item data class
 

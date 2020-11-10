@@ -1,4 +1,4 @@
-package com.pk.musicplayer.adapters;
+package com.pk.musicplayer.adapters.player;
 
 import android.content.Context;
 import android.net.Uri;

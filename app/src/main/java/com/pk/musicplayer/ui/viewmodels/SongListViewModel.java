@@ -1,11 +1,11 @@
-package com.pk.musicplayer.viewmodels;
+package com.pk.musicplayer.ui.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.pk.musicplayer.models.Song;
-import com.pk.musicplayer.repositories.SongRepository;
+import com.pk.musicplayer.db.models.Song;
+import com.pk.musicplayer.db.repositories.SongRepository;
 
 import java.util.List;
 

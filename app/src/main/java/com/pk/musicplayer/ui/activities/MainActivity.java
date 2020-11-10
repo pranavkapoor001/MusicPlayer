@@ -17,7 +17,7 @@ import com.pk.musicplayer.ui.fragments.BottomMediaControllerFragment;
 import com.pk.musicplayer.ui.fragments.HomeFragment;
 import com.pk.musicplayer.ui.fragments.NowPlayingFragment;
 import com.pk.musicplayer.ui.fragments.SearchFragment;
-import com.pk.musicplayer.viewmodels.NowPlayingViewModel;
+import com.pk.musicplayer.ui.viewmodels.NowPlayingViewModel;
 
 public class MainActivity extends AppCompatActivity implements IMainActivity {
 

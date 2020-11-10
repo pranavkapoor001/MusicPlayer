@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.media.MediaBrowserServiceCompat;
 import androidx.media.session.MediaButtonReceiver;
 
-import com.pk.musicplayer.adapters.ExoPlayerAdapter;
+import com.pk.musicplayer.adapters.player.ExoPlayerAdapter;
 import com.pk.musicplayer.helper.MediaNotificationHelper;
 
 import java.util.List;
