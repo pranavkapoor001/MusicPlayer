@@ -162,6 +162,22 @@ public class MusicService extends MediaBrowserServiceCompat {
     }
 
 
+    //---------------------------------- Misc Methods --------------------------------------------//
+
+    private void setMediaPlaybackState(int state) {
+        PlaybackStateCompat.Builder playbackStateBuilder = new PlaybackStateCompat.Builder();
+        if (state == PlaybackStateCompat.STATE_PLAYING) {
+            playbackStateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE
+                    | PlaybackStateCompat.ACTION_PAUSE);
+        } else {
+            playbackStateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE
+                    | PlaybackStateCompat.ACTION_PLAY);
+        }
+        playbackStateBuilder.setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 0);
+        mediaSession.setPlaybackState(playbackStateBuilder.build());
+    } //TODO: Update notification to reflect state (notification play/pause works)
+
+
     //---------------------------------- MediaSessionCallbacks -----------------------------------//
 
     /*
@@ -189,6 +205,9 @@ public class MusicService extends MediaBrowserServiceCompat {
 
             exoPlayerAdapter.play();
 
+            // Set playback state
+            setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+
             // Start foreground service, show notification
             showNotification();
 
@@ -199,6 +218,9 @@ public class MusicService extends MediaBrowserServiceCompat {
             super.onPause();
 
             exoPlayerAdapter.pause();
+
+            // Set playback state
+            setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
         }
 
         @Override

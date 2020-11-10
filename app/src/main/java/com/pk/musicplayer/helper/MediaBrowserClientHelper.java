@@ -8,7 +8,9 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
+import android.widget.ImageView;
 
+import com.pk.musicplayer.R;
 import com.pk.musicplayer.services.MusicService;
 
 /* There are 4 Client side components
@@ -102,6 +104,22 @@ public class MediaBrowserClientHelper {
 
         // Register Media Controller Callback to keep UI in sync with media session
         mediaController = MediaControllerCompat.getMediaController(mActivity);
+
+        // Set UI state
+
+        ImageView ivPlayPause = mActivity.findViewById(R.id.play_pause);
+
+        int currentState = mediaController.getPlaybackState().getState();
+
+        // Set state to play/pause button
+        if (currentState == PlaybackStateCompat.STATE_PLAYING) {
+            Log.e(TAG, "buildTransportControls: Playing");
+            ivPlayPause.setImageResource(R.drawable.ic_pause);
+        } else {
+            Log.e(TAG, "buildTransportControls: Paused");
+            ivPlayPause.setImageResource(R.drawable.ic_play);
+        }
+
         mediaController.registerCallback(mediaControllerCallback);
     }
 
