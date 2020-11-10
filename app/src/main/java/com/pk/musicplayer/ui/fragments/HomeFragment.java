@@ -1,5 +1,7 @@
 package com.pk.musicplayer.ui.fragments;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.pk.musicplayer.adapters.SongListAdapter;
 import com.pk.musicplayer.adapters.SongListViewHolder;
 import com.pk.musicplayer.helper.PermissionHelper;
 import com.pk.musicplayer.models.Song;
+import com.pk.musicplayer.ui.activities.IMainActivity;
 import com.pk.musicplayer.viewmodels.SongListViewModel;
 
 import java.util.List;
@@ -27,6 +30,7 @@ public class HomeFragment extends Fragment implements SongListViewHolder.IMediaS
     private RecyclerView mSongListRecyclerView;
     private SongListViewModel mSongListViewModel;
     private SongListAdapter mSongListAdapter;
+    private IMainActivity iMainActivity;
 
 
     //-------------------------------------Lifecycle methods--------------------------------------//
@@ -84,7 +88,14 @@ public class HomeFragment extends Fragment implements SongListViewHolder.IMediaS
     }
 
     @Override
-    public void onMediaSelected(int position) {
+    public void onMediaSelected(Uri mediaUri) {
+        iMainActivity.onMediaSelected(mediaUri);
+    }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        iMainActivity = (IMainActivity) getActivity();
     }
 }

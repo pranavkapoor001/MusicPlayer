@@ -1,5 +1,6 @@
 package com.pk.musicplayer.adapters;
 
+import android.net.Uri;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ public class SongListViewHolder extends RecyclerView.ViewHolder implements View.
 
     // vars
     private IMediaSelector mIMediaSelector;
+    private Song currentSong;
 
     public SongListViewHolder(@NonNull View itemView, IMediaSelector iMediaSelector) {
         super(itemView);
@@ -31,9 +33,15 @@ public class SongListViewHolder extends RecyclerView.ViewHolder implements View.
 
         // Set IMediaSelector listener
         mIMediaSelector = iMediaSelector;
+
+        // Set OnClick listeners
+        tvSongTitle.setOnClickListener(this);
+        ivAlbumArt.setOnClickListener(this);
     }
 
     public void bindTo(Song currentSong) {
+        this.currentSong = currentSong;
+
         tvSongTitle.setText(currentSong.getSongTitle());
 
         Glide.with(itemView.getContext())
@@ -45,10 +53,10 @@ public class SongListViewHolder extends RecyclerView.ViewHolder implements View.
 
     @Override
     public void onClick(View v) {
-        mIMediaSelector.onMediaSelected(getAdapterPosition());
+        mIMediaSelector.onMediaSelected(currentSong.getSongUri());
     }
 
     public interface IMediaSelector {
-        void onMediaSelected(int position);
+        void onMediaSelected(Uri mediaUri);
     }
 }

@@ -60,7 +60,7 @@ public class SongRepository {
 
         // Get Audio Track name
         String[] projection = new String[]{MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.ALBUM_ID};
+                MediaStore.Audio.Media._ID};
 
         // Select only music files
         String selectionClause = MediaStore.Audio.Media.IS_MUSIC + " = ?";
@@ -88,16 +88,19 @@ public class SongRepository {
                         musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
 
                 // Get id to concatenate with alarmArt folder path
-                long albumId = musicCursor.getLong(
-                        musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+                String id = musicCursor.getString(
+                        musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
 
                 // Get path for albumArt
                 Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
-                Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
+                Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, Long.parseLong(id));
 
+                // Get path for actual media file
+                Uri contentUri = ContentUris.withAppendedId(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.parseLong(id));
 
-                // Add song name to list
-                mSongList.add(new Song(songTitle, albumArtUri));
+                // Add song to list
+                mSongList.add(new Song(songTitle, albumArtUri, contentUri));
 
             }
         }

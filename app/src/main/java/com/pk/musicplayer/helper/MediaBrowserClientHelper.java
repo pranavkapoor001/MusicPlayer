@@ -127,4 +127,11 @@ public class MediaBrowserClientHelper {
         }
         mediaBrowser.disconnect();
     }
+
+    public MediaControllerCompat.TransportControls getTransportControls() {
+        if (mediaController == null)
+            throw new IllegalStateException("MediaController is null!");
+
+        return mediaController.getTransportControls();
+    }
 }

@@ -1,5 +1,6 @@
 package com.pk.musicplayer.ui.activities;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -14,7 +15,7 @@ import com.pk.musicplayer.ui.fragments.HomeFragment;
 import com.pk.musicplayer.ui.fragments.NowPlayingFragment;
 import com.pk.musicplayer.ui.fragments.SearchFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IMainActivity {
 
     private BottomNavigationView bottomNavigationView;
     private MediaBrowserClientHelper mediaBrowserClientHelper;
@@ -87,5 +88,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Disconnect from MediaBrowser
         mediaBrowserClientHelper.onStop();
+    }
+
+    @Override
+    public void onMediaSelected(Uri mediaUri) {
+        mediaBrowserClientHelper.getTransportControls().playFromUri(mediaUri, null);
     }
 }

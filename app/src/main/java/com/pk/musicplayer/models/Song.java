@@ -8,10 +8,12 @@ public class Song {
 
     private String mSongTitle;
     private Uri mAlbumArtUri;
+    private Uri mSongUri;
 
-    public Song(String songTitle, Uri albumArtUri) {
+    public Song(String songTitle, Uri albumArtUri, Uri songUri) {
         mSongTitle = songTitle;
         mAlbumArtUri = albumArtUri;
+        mSongUri = songUri;
     }
 
     // Getters
@@ -26,5 +28,9 @@ public class Song {
 
     public Uri getAlbumArtUri() {
         return mAlbumArtUri;
+    }
+
+    public Uri getSongUri() {
+        return mSongUri;
     }
 }
