@@ -3,15 +3,18 @@ package com.pk.musicplayer.repositories;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Size;
 
 import androidx.lifecycle.MutableLiveData;
 
 import com.pk.musicplayer.application.MyApplication;
 import com.pk.musicplayer.models.Song;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,16 +94,21 @@ public class SongRepository {
                 String id = musicCursor.getString(
                         musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
 
-                // Get path for albumArt
-                Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
-                Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, Long.parseLong(id));
-
                 // Get path for actual media file
                 Uri contentUri = ContentUris.withAppendedId(
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.parseLong(id));
 
-                // Add song to list
-                mSongList.add(new Song(songTitle, albumArtUri, contentUri));
+                // Load Media thumbnail
+                Bitmap thumbnail = null;
+                try {
+                    thumbnail = contentResolver.loadThumbnail(contentUri,
+                            new Size(640, 480), null);
+                } catch (IOException ignored) {
+                    // No thumbnail found
+                } finally {
+                    // Add song to list
+                    mSongList.add(new Song(songTitle, thumbnail, contentUri));
+                }
 
             }
         }

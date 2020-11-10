@@ -45,7 +45,7 @@ public class SongListViewHolder extends RecyclerView.ViewHolder implements View.
         tvSongTitle.setText(currentSong.getSongTitle());
 
         Glide.with(itemView.getContext())
-                .load(currentSong.getAlbumArtUri())
+                .load(currentSong.getSongThumbnail())
                 .placeholder(R.drawable.ic_music)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(ivAlbumArt);

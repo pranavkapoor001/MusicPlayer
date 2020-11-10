@@ -2,17 +2,18 @@ package com.pk.musicplayer.models;
 
 // Song item data class
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 public class Song {
 
     private String mSongTitle;
-    private Uri mAlbumArtUri;
+    private Bitmap mSongThumbnail;
     private Uri mSongUri;
 
-    public Song(String songTitle, Uri albumArtUri, Uri songUri) {
+    public Song(String songTitle, Bitmap songThumbnail, Uri songUri) {
         mSongTitle = songTitle;
-        mAlbumArtUri = albumArtUri;
+        mSongThumbnail = songThumbnail;
         mSongUri = songUri;
     }
 
@@ -26,8 +27,8 @@ public class Song {
         mSongTitle = songTitle;
     }
 
-    public Uri getAlbumArtUri() {
-        return mAlbumArtUri;
+    public Bitmap getSongThumbnail() {
+        return mSongThumbnail;
     }
 
     public Uri getSongUri() {
