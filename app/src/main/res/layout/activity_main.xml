@@ -13,6 +13,13 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_nav"></FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/fav_fragment_container"
+        android:name="com.pk.musicplayer.FavFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_now_playing" />
+
     <fragment
         android:id="@+id/bottom_media_controller"
         android:name="com.pk.musicplayer.ui.fragments.BottomMediaControllerFragment"

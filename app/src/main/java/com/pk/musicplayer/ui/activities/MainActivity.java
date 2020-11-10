@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pk.musicplayer.R;
@@ -15,12 +16,15 @@ import com.pk.musicplayer.ui.fragments.BottomMediaControllerFragment;
 import com.pk.musicplayer.ui.fragments.HomeFragment;
 import com.pk.musicplayer.ui.fragments.NowPlayingFragment;
 import com.pk.musicplayer.ui.fragments.SearchFragment;
+import com.pk.musicplayer.viewmodels.NowPlayingViewModel;
 
 public class MainActivity extends AppCompatActivity implements IMainActivity {
 
     private BottomNavigationView bottomNavigationView;
     private MediaBrowserClientHelper mediaBrowserClientHelper;
     private boolean mIsPlaying;
+    private NowPlayingViewModel mNowPlayingViewModel;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -74,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
 
         // Create MediaBrowserCompat
         mediaBrowserClientHelper = new MediaBrowserClientHelper(this);
+
+        mNowPlayingViewModel = ViewModelProviders.of(this).get(NowPlayingViewModel.class);
     }
 
     @Override
@@ -100,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
         getBottomMediaController().setIsPlaying(true);
         getBottomMediaController().setMediaTitle("Playing Song");
 
+        mNowPlayingViewModel.setIsPlaying(true);
+
     }
 
 
@@ -119,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
             // show play button
             getBottomMediaController().setIsPlaying(false);
 
+            // show play button in now playing
+            mNowPlayingViewModel.setIsPlaying(false);
+
             mIsPlaying = false;
         } else {
             // resume playback
@@ -126,6 +137,9 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
 
             // show pause button
             getBottomMediaController().setIsPlaying(true);
+
+            // show pause button in now playing
+            mNowPlayingViewModel.setIsPlaying(true);
 
             mIsPlaying = true;
         }
