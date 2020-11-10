@@ -1,7 +1,7 @@
 package com.pk.musicplayer.ui.activities;
 
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.media.MediaBrowserCompat;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -98,9 +98,14 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
     }
 
     @Override
-    public void onMediaSelected(Uri mediaUri) {
-        mediaBrowserClientHelper.getTransportControls().playFromUri(mediaUri, null);
+    public void onMediaSelected(MediaBrowserCompat.MediaItem songItem) {
         mIsPlaying = true;
+
+        // Set MediaItem in view model
+        mNowPlayingViewModel.setSongItem(songItem);
+
+        mediaBrowserClientHelper.getTransportControls().playFromUri(
+                songItem.getDescription().getMediaUri(), null);
 
         getBottomMediaController().setIsPlaying(true);
         getBottomMediaController().setMediaTitle("Playing Song");

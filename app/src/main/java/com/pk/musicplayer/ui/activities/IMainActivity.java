@@ -1,10 +1,10 @@
 package com.pk.musicplayer.ui.activities;
 
-import android.net.Uri;
+import android.support.v4.media.MediaBrowserCompat;
 
 public interface IMainActivity {
 
-    void onMediaSelected(Uri mediaUri);
+    void onMediaSelected(MediaBrowserCompat.MediaItem mediaItem);
 
     void playPause();
 }

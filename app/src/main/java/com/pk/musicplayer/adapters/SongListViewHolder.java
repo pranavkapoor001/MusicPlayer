@@ -1,6 +1,6 @@
 package com.pk.musicplayer.adapters;
 
-import android.net.Uri;
+import android.support.v4.media.MediaBrowserCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pk.musicplayer.R;
 import com.pk.musicplayer.models.Song;
+import com.pk.musicplayer.repositories.SongRepository;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -53,10 +54,12 @@ public class SongListViewHolder extends RecyclerView.ViewHolder implements View.
 
     @Override
     public void onClick(View v) {
-        mIMediaSelector.onMediaSelected(currentSong.getSongUri());
+        MediaBrowserCompat.MediaItem currentSongItem =
+                SongRepository.getInstance().getMediaItems().get(getAdapterPosition());
+        mIMediaSelector.onMediaSelected(currentSongItem);
     }
 
     public interface IMediaSelector {
-        void onMediaSelected(Uri mediaUri);
+        void onMediaSelected(MediaBrowserCompat.MediaItem currentSongItem);
     }
 }

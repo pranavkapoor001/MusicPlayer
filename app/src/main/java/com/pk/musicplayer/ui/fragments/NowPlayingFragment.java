@@ -1,8 +1,8 @@
 package com.pk.musicplayer.ui.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.media.MediaBrowserCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.textview.MaterialTextView;
 import com.pk.musicplayer.R;
 import com.pk.musicplayer.ui.activities.IMainActivity;
-import com.pk.musicplayer.ui.activities.MainActivity;
 import com.pk.musicplayer.viewmodels.NowPlayingViewModel;
 
 public class NowPlayingFragment extends Fragment implements View.OnClickListener {
@@ -35,7 +34,6 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     private IMainActivity mIMainActivity;
     private Context mContext;
     private boolean mIsPlaying;
-    private Activity mActivity;
 
 
     //------------------------------- Lifecycle methods ------------------------------------------//
@@ -78,8 +76,6 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         mContext = context;
         mIMainActivity = (IMainActivity) getActivity();
 
-        if (context instanceof MainActivity)
-            mActivity = (MainActivity) context;
     }
 
 
@@ -115,13 +111,20 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
          * See: https://developer.android.com/topic/libraries/architecture/viewmodel.html#sharing
          */
         final NowPlayingViewModel mNowPlayingViewModel =
-                NowPlayingViewModel.getInstance((MainActivity) mActivity);
+                NowPlayingViewModel.getInstance(requireActivity());
 
         // Setup observer for play/pause state
         mNowPlayingViewModel.getIsPlaying().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 setIsPlaying(aBoolean);
+            }
+        });
+
+        mNowPlayingViewModel.getSongItem().observe(this, new Observer<MediaBrowserCompat.MediaItem>() {
+            @Override
+            public void onChanged(MediaBrowserCompat.MediaItem mediaItem) {
+                updateSongImageTitle(mediaItem);
             }
         });
     }
@@ -132,5 +135,10 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         mIMainActivity.playPause();
+    }
+
+    private void updateSongImageTitle(MediaBrowserCompat.MediaItem mediaItem) {
+        ivSongImage.setImageBitmap(mediaItem.getDescription().getIconBitmap());
+        tvSongTitle.setText(mediaItem.getDescription().getTitle());
     }
 }
