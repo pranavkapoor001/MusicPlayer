@@ -59,6 +59,5 @@ dependencies {
 
     // ExoPlayer
     implementation 'com.google.android.exoplayer:exoplayer-core:2.12.1'
-    implementation 'com.google.android.exoplayer:extension-mediasession:2.11.8'
 
 }
