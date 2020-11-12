@@ -25,7 +25,7 @@ public class SongRepository {
     private static final String TAG = "SongRepository";
     private static SongRepository instance;
     MutableLiveData<List<Song>> mSongs = new MutableLiveData<>();
-    private List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+    private List<MediaMetadataCompat> metadataList = new ArrayList<>();
 
     // Media Item vars
     private String songTitle, songId;
@@ -128,10 +128,13 @@ public class SongRepository {
                 MediaMetadataCompat metadata = getMetadata();
 
                 // Add to MediaItem list
-                mediaItems.add(musicCursor.getPosition(),
+                /*mediaItems.add(musicCursor.getPosition(),
                         new MediaBrowserCompat.MediaItem(
                                 metadata.getDescription(),
-                                MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
+                                MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));*/
+
+                metadataList.add(musicCursor.getPosition(), metadata);
+
             }
         }
 
@@ -158,7 +161,7 @@ public class SongRepository {
         return metadata;
     }
 
-    public List<MediaBrowserCompat.MediaItem> getMediaItems() {
-        return mediaItems;
+    public List<MediaMetadataCompat> getMediaItems() {
+        return metadataList;
     }
 }
