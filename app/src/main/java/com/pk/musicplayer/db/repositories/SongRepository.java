@@ -27,7 +27,7 @@ public class SongRepository {
     private List<MediaMetadataCompat> metadataList = new ArrayList<>();
 
     // Media Item vars
-    private String songTitle, songId;
+    private String songTitle, songId, songArtist;
     private Bitmap thumbnail;
     private Uri contentUri;
 
@@ -70,7 +70,7 @@ public class SongRepository {
 
         // Get Audio Track name
         String[] projection = new String[]{MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media._ID};
+                MediaStore.Audio.Media._ID, MediaStore.Audio.Artists.ARTIST};
 
         // Select only music files
         String selectionClause = MediaStore.Audio.Media.IS_MUSIC + " = ?";
@@ -94,12 +94,17 @@ public class SongRepository {
         if (musicCursor != null && musicCursor.getCount() > 0) {
             while (musicCursor.moveToNext()) {
 
+                // Get song name
                 songTitle = musicCursor.getString(
                         musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
 
                 // Get id to concatenate with alarmArt folder path
                 songId = musicCursor.getString(
                         musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+
+                // Get song artist
+                songArtist = musicCursor.getString(
+                        musicCursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
 
                 // Get path for actual media file
                 contentUri = ContentUris.withAppendedId(
@@ -148,6 +153,7 @@ public class SongRepository {
         MediaMetadataCompat metadata = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songTitle)
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, songId)
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, songArtist)
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, String.valueOf(contentUri))
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, thumbnail)
                 .build();

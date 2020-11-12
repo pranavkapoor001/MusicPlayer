@@ -76,8 +76,7 @@ public class MediaNotificationHelper {
 
         // Add metadata
         builder.setContentTitle(description.getTitle())
-                .setContentText("Artist Name")
-                .setSubText("Subtext")
+                .setContentText(description.getSubtitle())
                 .setLargeIcon(description.getIconBitmap());
 
         // Launch activity when notification is clicked
