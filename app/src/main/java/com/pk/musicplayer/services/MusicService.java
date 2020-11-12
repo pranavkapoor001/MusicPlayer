@@ -238,6 +238,9 @@ public class MusicService extends MediaBrowserServiceCompat {
 
             exoPlayerAdapter.pause();
 
+            // Allow notification to be swiped away
+            stopForeground(false);
+
             // Set playback state
             setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
         }
