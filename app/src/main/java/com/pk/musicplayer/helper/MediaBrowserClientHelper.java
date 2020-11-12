@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.pk.musicplayer.R;
 import com.pk.musicplayer.services.MusicService;
+import com.pk.musicplayer.ui.viewmodels.NowPlayingViewModel;
 
 /* There are 4 Client side components
  *
@@ -44,6 +45,8 @@ public class MediaBrowserClientHelper {
                 @Override
                 public void onPlaybackStateChanged(PlaybackStateCompat state) {
                     super.onPlaybackStateChanged(state);
+
+                    buildTransportControls();
                 }
             };
 
@@ -111,13 +114,18 @@ public class MediaBrowserClientHelper {
 
         int currentState = mediaController.getPlaybackState().getState();
 
+        // Set UI state of NowPlaying Fragment
+        NowPlayingViewModel nowPlayingViewModel = NowPlayingViewModel.getInstance(mActivity);
+
         // Set state to play/pause button
         if (currentState == PlaybackStateCompat.STATE_PLAYING) {
             Log.e(TAG, "buildTransportControls: Playing");
             ivPlayPause.setImageResource(R.drawable.ic_pause);
+            nowPlayingViewModel.setIsPlaying(true);
         } else {
             Log.e(TAG, "buildTransportControls: Paused");
             ivPlayPause.setImageResource(R.drawable.ic_play);
+            nowPlayingViewModel.setIsPlaying(false);
         }
 
         mediaController.registerCallback(mediaControllerCallback);

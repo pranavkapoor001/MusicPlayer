@@ -148,9 +148,9 @@ public class MusicService extends MediaBrowserServiceCompat {
     /* This method shows media notification
      * And starts foreground service if not already started
      */
-    private void showNotification() {
+    private void showNotification(boolean isPlaying) {
         Notification notification =
-                mediaNotificationHelper.buildNotification(mediaSession.getController());
+                mediaNotificationHelper.buildNotification(mediaSession.getController(), isPlaying);
 
         // Start service if not already started
         if (!mIsServiceStarted) {
@@ -228,7 +228,7 @@ public class MusicService extends MediaBrowserServiceCompat {
             setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
 
             // Start foreground service, show notification
-            showNotification();
+            showNotification(true /* Playing */);
 
         }
 
@@ -238,8 +238,12 @@ public class MusicService extends MediaBrowserServiceCompat {
 
             exoPlayerAdapter.pause();
 
+            // Show paused notification
+            showNotification(false /* Paused */);
+
             // Allow notification to be swiped away
             stopForeground(false);
+            mIsServiceStarted = false;
 
             // Set playback state
             setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);

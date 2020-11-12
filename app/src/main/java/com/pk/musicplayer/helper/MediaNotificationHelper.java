@@ -63,7 +63,7 @@ public class MediaNotificationHelper {
 
     //---------------------------------- Notifications -------------------------------------------//
 
-    public Notification buildNotification(MediaControllerCompat controller) {
+    public Notification buildNotification(MediaControllerCompat controller, boolean isPlaying) {
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
@@ -94,9 +94,16 @@ public class MediaNotificationHelper {
                 .setColor(mMusicService.getColor(R.color.colorAccent));
 
         // Add a pause button
-        builder.addAction(new NotificationCompat.Action(R.drawable.ic_pause,
-                "Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(mMusicService,
-                PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        if (isPlaying) {
+            builder.addAction(new NotificationCompat.Action(R.drawable.ic_pause,
+                    "Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(mMusicService,
+                    PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        } else {
+            // Add a play button
+            builder.addAction(new NotificationCompat.Action(R.drawable.ic_play,
+                    "Play", MediaButtonReceiver.buildMediaButtonPendingIntent(mMusicService,
+                    PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        }
 
         /* Use Media Style notification
          * Associate with media session, add pause button to compat view
