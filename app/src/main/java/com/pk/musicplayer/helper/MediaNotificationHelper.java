@@ -4,9 +4,8 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
@@ -15,6 +14,7 @@ import androidx.media.session.MediaButtonReceiver;
 
 import com.pk.musicplayer.BuildConfig;
 import com.pk.musicplayer.R;
+import com.pk.musicplayer.db.repositories.NowPlayingMetadataRepo;
 import com.pk.musicplayer.services.MusicService;
 
 public class MediaNotificationHelper {
@@ -69,16 +69,16 @@ public class MediaNotificationHelper {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 mMusicService, CHANNEL_ID);
 
-        // Temporary Icon
-        Bitmap iconBitmap = BitmapFactory.decodeResource(
-                mMusicService.getResources(), R.drawable.ic_notification_large_icon);
+        // Get metadata description
+        MediaDescriptionCompat description =
+                NowPlayingMetadataRepo.getInstance().getMetadata().getDescription();
 
 
         // Add metadata
-        builder.setContentTitle("Song Title")
+        builder.setContentTitle(description.getTitle())
                 .setContentText("Artist Name")
                 .setSubText("Subtext")
-                .setLargeIcon(iconBitmap);
+                .setLargeIcon(description.getIconBitmap());
 
         // Launch activity when notification is clicked
         builder.setContentIntent(controller.getSessionActivity());
