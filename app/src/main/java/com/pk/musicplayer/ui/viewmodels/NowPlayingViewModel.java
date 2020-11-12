@@ -1,7 +1,7 @@
 package com.pk.musicplayer.ui.viewmodels;
 
 import android.app.Activity;
-import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
@@ -14,9 +14,8 @@ public class NowPlayingViewModel extends ViewModel {
     private static NowPlayingViewModel instance;
 
     // vars
-    private final MutableLiveData<String> mSongName = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mIsPlaying = new MutableLiveData<>();
-    private final MutableLiveData<MediaBrowserCompat.MediaItem> mSongItem = new MutableLiveData<>();
+    private final MutableLiveData<MediaMetadataCompat> mSongMetadata = new MutableLiveData<>();
 
     /* Singleton: Return the same instance of NowPlayingViewModel
      * Since this instance's data needs to be shared among all observers
@@ -33,15 +32,6 @@ public class NowPlayingViewModel extends ViewModel {
 
     //----------------------------  Getters / Setters  -------------------------------------------//
 
-    public LiveData<String> getSongName() {
-        return mSongName;
-    }
-
-    public void setSongName(String songName) {
-        mSongName.setValue(songName);
-    }
-
-
     public LiveData<Boolean> getIsPlaying() {
         return mIsPlaying;
     }
@@ -50,11 +40,11 @@ public class NowPlayingViewModel extends ViewModel {
         mIsPlaying.setValue(isPlaying);
     }
 
-    public LiveData<MediaBrowserCompat.MediaItem> getSongItem() {
-        return mSongItem;
+    public LiveData<MediaMetadataCompat> getSongMetadata() {
+        return mSongMetadata;
     }
 
-    public void setSongItem(MediaBrowserCompat.MediaItem songItem) {
-        mSongItem.setValue(songItem);
+    public void setSongMetadata(MediaMetadataCompat songMetadata) {
+        mSongMetadata.setValue(songMetadata);
     }
 }

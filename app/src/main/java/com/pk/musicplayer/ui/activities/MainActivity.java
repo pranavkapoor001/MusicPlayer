@@ -1,7 +1,8 @@
 package com.pk.musicplayer.ui.activities;
 
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pk.musicplayer.R;
+import com.pk.musicplayer.db.repositories.NowPlayingMetadataRepo;
 import com.pk.musicplayer.helper.MediaBrowserClientHelper;
 import com.pk.musicplayer.ui.fragments.BottomMediaControllerFragment;
 import com.pk.musicplayer.ui.fragments.HomeFragment;
@@ -112,20 +114,11 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
     }
 
     @Override
-    public void onMediaSelected(MediaBrowserCompat.MediaItem songItem) {
+    public void onMediaSelected() {
         mIsPlaying = true;
 
-        // Set MediaItem in view model
-        mNowPlayingViewModel.setSongItem(songItem);
-
-        mediaBrowserClientHelper.getTransportControls().playFromUri(
-                songItem.getDescription().getMediaUri(), null);
-
-        getBottomMediaController().setIsPlaying(true);
-        getBottomMediaController().setMediaTitle("Playing Song");
-
-        mNowPlayingViewModel.setIsPlaying(true);
-
+        // Update NowPlayingFragment & BottomMediaControllerFragment UI
+        updateNowPlayingUI();
     }
 
 
@@ -142,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
             // pause the playback
             mediaBrowserClientHelper.getTransportControls().pause();
 
-            // show play button
+            // show play button in bottom controller
             getBottomMediaController().setIsPlaying(false);
 
             // show play button in now playing
@@ -153,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
             // resume playback
             mediaBrowserClientHelper.getTransportControls().play();
 
-            // show pause button
+            // show pause button in bottom controller
             getBottomMediaController().setIsPlaying(true);
 
             // show pause button in now playing
@@ -162,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
             mIsPlaying = true;
         }
     }
+
+    //-------------------------------- UI Update Methods -----------------------------------------//
 
     private void showHideBottomMediaFragment(boolean showFragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -178,5 +173,31 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
                 fragmentTransaction.hide(bottomMediaFragment);
             fragmentTransaction.commit();
         }
+    }
+
+    /* This method updates the NowPlayingFragment
+     * and BottomMediaController with current songs metadata and state
+     */
+    private void updateNowPlayingUI() {
+
+        // Get song Uri from NowPlayingMetadata Helper
+        MediaMetadataCompat metadata = NowPlayingMetadataRepo.getInstance().getMetadata();
+        String songUri = metadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI);
+
+        // Set MediaItem in view model
+        mNowPlayingViewModel.setSongMetadata(metadata);
+
+        // Play from Uri
+        mediaBrowserClientHelper.getTransportControls()
+                .playFromUri(Uri.parse(songUri), null);
+
+        // Update bottom media player
+        getBottomMediaController().setIsPlaying(true);
+        getBottomMediaController()
+                .setMediaTitle(metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
+
+        // Update Play state in NowPlayingFragment
+        mNowPlayingViewModel.setIsPlaying(true);
+
     }
 }

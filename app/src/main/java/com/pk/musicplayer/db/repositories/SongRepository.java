@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 import android.util.Size;
@@ -25,7 +24,7 @@ public class SongRepository {
     private static final String TAG = "SongRepository";
     private static SongRepository instance;
     MutableLiveData<List<Song>> mSongs = new MutableLiveData<>();
-    private List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+    private List<MediaMetadataCompat> metadataList = new ArrayList<>();
 
     // Media Item vars
     private String songTitle, songId;
@@ -127,11 +126,9 @@ public class SongRepository {
                 // Build Metadata
                 MediaMetadataCompat metadata = getMetadata();
 
-                // Add to MediaItem list
-                mediaItems.add(musicCursor.getPosition(),
-                        new MediaBrowserCompat.MediaItem(
-                                metadata.getDescription(),
-                                MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
+                // Add to Metadata list
+                metadataList.add(musicCursor.getPosition(), metadata);
+
             }
         }
 
@@ -158,7 +155,7 @@ public class SongRepository {
         return metadata;
     }
 
-    public List<MediaBrowserCompat.MediaItem> getMediaItems() {
-        return mediaItems;
+    public List<MediaMetadataCompat> getMediaItems() {
+        return metadataList;
     }
 }

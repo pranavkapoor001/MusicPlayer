@@ -2,7 +2,6 @@ package com.pk.musicplayer.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.media.MediaBrowserCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,8 +87,9 @@ public class HomeFragment extends Fragment implements SongListViewHolder.IMediaS
     }
 
     @Override
-    public void onMediaSelected(MediaBrowserCompat.MediaItem songItem) {
-        iMainActivity.onMediaSelected(songItem);
+    public void onMediaSelected() {
+        // Notify MainActivity that a media item is selected
+        iMainActivity.onMediaSelected();
     }
 
     @Override

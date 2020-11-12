@@ -2,7 +2,7 @@ package com.pk.musicplayer.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,10 +81,6 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     //------------------------------- UI Setter methods ------------------------------------------//
 
-    public void setSongName(String name) {
-        tvSongTitle.setText(name);
-    }
-
     public void setIsPlaying(boolean isPlaying) {
 
         Log.e(TAG, "setIsPlaying Fragment: Called");
@@ -121,10 +117,10 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
             }
         });
 
-        mNowPlayingViewModel.getSongItem().observe(this, new Observer<MediaBrowserCompat.MediaItem>() {
+        mNowPlayingViewModel.getSongMetadata().observe(this, new Observer<MediaMetadataCompat>() {
             @Override
-            public void onChanged(MediaBrowserCompat.MediaItem mediaItem) {
-                updateSongImageTitle(mediaItem);
+            public void onChanged(MediaMetadataCompat metadata) {
+                updateNowPlayingUI(metadata);
             }
         });
     }
@@ -137,8 +133,8 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         mIMainActivity.playPause();
     }
 
-    private void updateSongImageTitle(MediaBrowserCompat.MediaItem mediaItem) {
-        ivSongImage.setImageBitmap(mediaItem.getDescription().getIconBitmap());
-        tvSongTitle.setText(mediaItem.getDescription().getTitle());
+    private void updateNowPlayingUI(MediaMetadataCompat metadata) {
+        ivSongImage.setImageBitmap(metadata.getDescription().getIconBitmap());
+        tvSongTitle.setText(metadata.getDescription().getTitle());
     }
 }
