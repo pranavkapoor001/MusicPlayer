@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment implements SongListViewHolder.IMediaS
     //----------------------------------- Init methods -------------------------------------------//
 
     public void initSongListViewModel() {
-        mSongListViewModel = ViewModelProviders.of(this).get(SongListViewModel.class);
+        mSongListViewModel = ViewModelProviders.of(requireActivity()).get(SongListViewModel.class);
 
         mSongListViewModel.getSongs().observe(this, new Observer<List<Song>>() {
             @Override
