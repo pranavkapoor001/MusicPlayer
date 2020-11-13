@@ -191,7 +191,7 @@ public class MusicService extends MediaBrowserServiceCompat {
         }
         playbackStateBuilder.setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 0);
         mediaSession.setPlaybackState(playbackStateBuilder.build());
-    } //TODO: Update notification to reflect state (notification play/pause works)
+    }
 
 
     //---------------------------------- MediaSessionCallbacks -----------------------------------//

@@ -91,4 +91,4 @@ public class BottomMediaControllerFragment extends Fragment implements View.OnCl
             mIMainActivity.playPause();
         }
     }
-} //TODO: Hide this fragment when center fragment is opened
+}

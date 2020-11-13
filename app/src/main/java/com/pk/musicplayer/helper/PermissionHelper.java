@@ -12,6 +12,8 @@ import com.pk.musicplayer.application.MyApplication;
 
 public class PermissionHelper {
 
+    public static final int READ_EXTERNAL_PERMISSION_CODE = 10;
+
     /**
      * This method checks if permission is granted
      * If not, then ask for permission
@@ -19,15 +21,14 @@ public class PermissionHelper {
      * @param view     for SnackBar
      * @param fragment to access requirePermission() method
      */
-    public static void checkPermission(View view, final Fragment fragment) {
+    public static int checkPermission(View view, final Fragment fragment) {
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
-        final int READ_EXTERNAL_PERMISSION_CODE = 10;
 
         Context context = MyApplication.getContext();
 
         // Return if permission is already granted
         if (context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED)
-            return;
+            return PackageManager.PERMISSION_GRANTED;
 
         // Show SnackBar if its NOT the first time asking for perm
         if (fragment.shouldShowRequestPermissionRationale(permission)) {
@@ -46,5 +47,6 @@ public class PermissionHelper {
             fragment.requestPermissions(permissions, READ_EXTERNAL_PERMISSION_CODE);
         }
 
-    }//TODO: Reload data when perm is granted
+        return PackageManager.PERMISSION_DENIED;
+    }
 }

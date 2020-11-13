@@ -151,7 +151,7 @@ public class SongRepository {
         Log.e(TAG, "getAllSongs: Triggered");
 
         return mSongList;
-    } //TODO: Request access to internal storage
+    }
 
 
     //--------------------------- Get MetaData Object --------------------------------------------//

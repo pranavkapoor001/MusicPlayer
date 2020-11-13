@@ -1,7 +1,9 @@
 package com.pk.musicplayer.ui.fragments;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,14 +50,17 @@ public class HomeFragment extends Fragment implements SongListViewHolder.IMediaS
         // Find views
         mSongListRecyclerView = view.findViewById(R.id.song_list_recycler);
 
-        // Init recycler view layout
-        initSongListRecyclerView();
+        /* Check permissions
+         * Init views and data only if permission is granted
+         */
+        int permissionGranted = PermissionHelper.checkPermission(view, this);
+        if (permissionGranted == PackageManager.PERMISSION_GRANTED) {
+            // Init recycler view layout
+            initSongListRecyclerView();
 
-        // Check permissions
-        PermissionHelper.checkPermission(view, this);
-
-        // Init view model
-        initSongListViewModel();
+            // Init view model
+            initSongListViewModel();
+        }
 
     }
 
@@ -98,4 +103,17 @@ public class HomeFragment extends Fragment implements SongListViewHolder.IMediaS
 
         iMainActivity = (IMainActivity) getActivity();
     }
+
+    // Init songs list RecyclerView and ViewModel when permission is granted
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        Log.e("HomeFragment", "onRequestPermissionsResult Called");
+
+        if (requestCode == PermissionHelper.READ_EXTERNAL_PERMISSION_CODE) {
+            // init recycler view and song view model
+            initSongListRecyclerView();
+            initSongListViewModel();
+        }
+    } //TODO: Handle case when permission is denied even after SnackBar - Rationale
 }
