@@ -9,7 +9,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 public class ExoPlayerAdapter {
 
     // ExoPlayer Components
-    private SimpleExoPlayer exoPlayer;
+    private static SimpleExoPlayer exoPlayer;
 
     // vars
     private Context mContext;
@@ -19,6 +19,12 @@ public class ExoPlayerAdapter {
         initExoPlayer();
     }
 
+    public static SimpleExoPlayer getExoplayer() {
+        if (exoPlayer == null)
+            throw new IllegalStateException("ExoPlayer should not be null!");
+
+        return exoPlayer;
+    }
 
     private void initExoPlayer() {
         if (exoPlayer == null)
