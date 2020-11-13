@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -131,6 +132,12 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
 
     @Override
     public void playPause() {
+        // Nothing to play
+        if (NowPlayingMetadataRepo.getInstance().getMetadata() == null) {
+            Toast.makeText(this, "Nothing to play", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (mIsPlaying) {
             // pause the playback
             mediaBrowserClientHelper.getTransportControls().pause();
