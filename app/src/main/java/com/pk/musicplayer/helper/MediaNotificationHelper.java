@@ -110,7 +110,7 @@ public class MediaNotificationHelper {
          * Add a cancel button with action as STOP
          */
         builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                //.setMediaSession(mMusicService.getSessionToken())
+                .setMediaSession(mMusicService.getSessionToken())
                 .setShowActionsInCompactView(0)
                 .setShowCancelButton(true)
                 .setCancelButtonIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(mMusicService,

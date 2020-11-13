@@ -16,6 +16,7 @@ import androidx.media.MediaBrowserServiceCompat;
 import androidx.media.session.MediaButtonReceiver;
 
 import com.pk.musicplayer.adapters.player.ExoPlayerAdapter;
+import com.pk.musicplayer.db.repositories.NowPlayingMetadataRepo;
 import com.pk.musicplayer.helper.MediaNotificationHelper;
 
 import java.util.List;
@@ -224,6 +225,8 @@ public class MusicService extends MediaBrowserServiceCompat {
             // Start playback
             exoPlayerAdapter.play();
 
+            mediaSession.setMetadata(NowPlayingMetadataRepo.getInstance().getMetadata());
+
             // Set playback state
             setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
 
@@ -259,4 +262,4 @@ public class MusicService extends MediaBrowserServiceCompat {
             stopMusicService();
         }
     }
-}
+} //TODO: Move code from media callbacks to exoplayer adapter
