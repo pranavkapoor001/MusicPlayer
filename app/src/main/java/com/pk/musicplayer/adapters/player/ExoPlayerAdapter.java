@@ -48,6 +48,10 @@ public class ExoPlayerAdapter {
         exoPlayer.setPlayWhenReady(false);
     }
 
+    public void seekTo(long position) {
+        exoPlayer.seekTo(position);
+    }
+
     public void stop() {
         exoPlayer.release();
     }

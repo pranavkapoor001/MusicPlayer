@@ -5,4 +5,6 @@ public interface IMainActivity {
     void onMediaSelected();
 
     void playPause();
+
+    void seekTo(long position);
 }

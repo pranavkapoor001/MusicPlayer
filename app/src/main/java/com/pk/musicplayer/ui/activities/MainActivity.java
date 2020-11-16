@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
     }
 
 
-    //------------------------------- Bottom Media Controller ------------------------------------//
+    //------------------------------- Media Controller methods------------------------------------//
 
     private BottomMediaControllerFragment getBottomMediaController() {
         return (BottomMediaControllerFragment) getSupportFragmentManager()
@@ -161,6 +161,12 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
 
             mIsPlaying = true;
         }
+    }
+
+    // Triggered from NowPlayingFragment
+    @Override
+    public void seekTo(long position) {
+        getMediaController().getTransportControls().seekTo(position);
     }
 
     //-------------------------------- UI Update Methods -----------------------------------------//

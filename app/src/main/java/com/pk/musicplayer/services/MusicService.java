@@ -260,6 +260,20 @@ public class MusicService extends MediaBrowserServiceCompat {
         }
 
         @Override
+        public void onSeekTo(long pos) {
+            super.onSeekTo(pos);
+
+            // Seek playback and reflect position in notification
+            exoPlayerAdapter.seekTo(pos);
+
+            // Set playback state and actions depending on play/pause state
+            if (ExoPlayerAdapter.getExoplayer().getPlayWhenReady())
+                setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+            else
+                setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
+        }
+
+        @Override
         public void onStop() {
             super.onStop();
 

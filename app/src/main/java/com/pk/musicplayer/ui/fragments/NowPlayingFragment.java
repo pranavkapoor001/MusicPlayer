@@ -81,6 +81,9 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         MediaMetadataCompat metadata = NowPlayingMetadataRepo.getInstance().getMetadata();
         updateNowPlayingUI(metadata);
 
+        // Set SeekBar touch listener
+        seekBarTouchListener();
+
     }
 
     @Override
@@ -211,5 +214,27 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     private void shouldUpdateSeekBar(boolean shouldUpdate) {
         // Start updating SeekBar
         mNowPlayingViewModel.seekBarStatus(shouldUpdate);
+    }
+
+    private void seekBarTouchListener() {
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                shouldUpdateSeekBar(false);
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Seek exoplayer playback
+                mIMainActivity.seekTo(seekBar.getProgress());
+                if (mIsPlaying)
+                    shouldUpdateSeekBar(true);
+            }
+        });
+
     }
 }
