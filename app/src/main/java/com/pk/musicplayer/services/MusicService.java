@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,8 @@ import androidx.core.content.ContextCompat;
 import androidx.media.MediaBrowserServiceCompat;
 import androidx.media.session.MediaButtonReceiver;
 
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.pk.musicplayer.adapters.player.ExoPlayerAdapter;
 import com.pk.musicplayer.db.repositories.NowPlayingMetadataRepo;
 import com.pk.musicplayer.helper.MediaNotificationHelper;
@@ -141,6 +144,35 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         // Init ExoPlayer
         exoPlayerAdapter = new ExoPlayerAdapter(this);
+        initExoPlayerListener();
+
+    }
+
+    private void initExoPlayerListener() {
+
+        final SimpleExoPlayer exoPlayer = ExoPlayerAdapter.getExoplayer();
+        exoPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onPlaybackStateChanged(int state) {
+                if (state == Player.STATE_ENDED) {
+
+                    // Restart playback
+                    exoPlayerAdapter.seekTo(0);
+                    exoPlayer.prepare();
+                    exoPlayerAdapter.play();
+                    setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+                    /*
+                    mediaSession.setPlaybackState(playbackStateBuilder.setState(
+                            PlaybackStateCompat.STATE_STOPPED, 0, 1f).build());
+                     */
+                    Log.i(TAG, "onPlaybackStateChanged: state: ENDED");
+                }
+            }
+        }); /*
+         *TODO: Merge playback state setters: CLEAN THIS...IMPLEMENT A CLEANER ARCHITECTURE HERE
+         ** Horrible code... player should be kept away from service
+         * SEE MEDIA SESSION CONNECTOR
+         */
 
     }
 
