@@ -121,6 +121,7 @@ public class MusicService extends MediaBrowserServiceCompat {
                 .setActions(
                         PlaybackStateCompat.ACTION_PLAY |
                                 PlaybackStateCompat.ACTION_PLAY_PAUSE);
+        //TODO: Update supported actions here
         mediaSession.setPlaybackState(playbackStateBuilder.build());
 
         /* Assign instance of MediaSessionCallbacks to media session
@@ -181,15 +182,21 @@ public class MusicService extends MediaBrowserServiceCompat {
     //---------------------------------- Misc Methods --------------------------------------------//
 
     private void setMediaPlaybackState(int state) {
+
+        /*
+         * All supported actions in a given playback state
+         * Must be set every time setActions() is used
+         */
         PlaybackStateCompat.Builder playbackStateBuilder = new PlaybackStateCompat.Builder();
         if (state == PlaybackStateCompat.STATE_PLAYING) {
             playbackStateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE
-                    | PlaybackStateCompat.ACTION_PAUSE);
+                    | PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_SEEK_TO);
         } else {
             playbackStateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE
-                    | PlaybackStateCompat.ACTION_PLAY);
+                    | PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_SEEK_TO);
         }
-        playbackStateBuilder.setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 0);
+        playbackStateBuilder.setState(
+                state, ExoPlayerAdapter.getExoplayer().getContentPosition(), 1f);
         mediaSession.setPlaybackState(playbackStateBuilder.build());
     }
 
