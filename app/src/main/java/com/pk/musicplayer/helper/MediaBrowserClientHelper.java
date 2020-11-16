@@ -3,14 +3,17 @@ package com.pk.musicplayer.helper;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.pk.musicplayer.R;
+import com.pk.musicplayer.db.repositories.NowPlayingMetadataRepo;
 import com.pk.musicplayer.services.MusicService;
 import com.pk.musicplayer.ui.viewmodels.NowPlayingViewModel;
 
@@ -108,24 +111,34 @@ public class MediaBrowserClientHelper {
         // Register Media Controller Callback to keep UI in sync with media session
         mediaController = MediaControllerCompat.getMediaController(mActivity);
 
-        // Set UI state
+        // Get song metadata from NowPlayingMetadataRepo to media description
+        NowPlayingMetadataRepo metadata = NowPlayingMetadataRepo.getInstance();
 
-        ImageView ivPlayPause = mActivity.findViewById(R.id.play_pause);
+        // UI Components
+        ImageView ivBottomPlayPause = mActivity.findViewById(R.id.bottom_play_pause);
+        TextView tvBottomSongTitle = mActivity.findViewById(R.id.bottom_song_title);
 
         int currentState = mediaController.getPlaybackState().getState();
 
-        // Set UI state of NowPlaying Fragment
+        // Get handle to view model
         NowPlayingViewModel nowPlayingViewModel = NowPlayingViewModel.getInstance(mActivity);
 
         // Set state to play/pause button
         if (currentState == PlaybackStateCompat.STATE_PLAYING) {
             Log.e(TAG, "buildTransportControls: Playing");
-            ivPlayPause.setImageResource(R.drawable.ic_pause);
+            ivBottomPlayPause.setImageResource(R.drawable.ic_pause);
             nowPlayingViewModel.setIsPlaying(true);
         } else {
             Log.e(TAG, "buildTransportControls: Paused");
-            ivPlayPause.setImageResource(R.drawable.ic_play);
+            ivBottomPlayPause.setImageResource(R.drawable.ic_play);
             nowPlayingViewModel.setIsPlaying(false);
+        }
+
+        // Set UI metadata if not null
+        if (metadata.getMetadata() != null) {
+            MediaDescriptionCompat description = metadata.getMetadata().getDescription();
+            // Set song title
+            tvBottomSongTitle.setText(description.getTitle());
         }
 
         mediaController.registerCallback(mediaControllerCallback);

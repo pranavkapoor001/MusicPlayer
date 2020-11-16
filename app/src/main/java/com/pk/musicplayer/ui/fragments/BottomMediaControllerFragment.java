@@ -45,8 +45,8 @@ public class BottomMediaControllerFragment extends Fragment implements View.OnCl
         super.onViewCreated(view, savedInstanceState);
 
         // Find Views
-        mSongTitle = view.findViewById(R.id.media_song_title);
-        mPlayPause = view.findViewById(R.id.play_pause);
+        mSongTitle = view.findViewById(R.id.bottom_song_title);
+        mPlayPause = view.findViewById(R.id.bottom_play_pause);
 
         // OnClick Listeners
         mPlayPause.setOnClickListener(this);
@@ -86,7 +86,7 @@ public class BottomMediaControllerFragment extends Fragment implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.play_pause) {
+        if (v.getId() == R.id.bottom_play_pause) {
             Log.e(TAG, "onClick: Called");
             mIMainActivity.playPause();
         }

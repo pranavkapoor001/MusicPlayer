@@ -5,14 +5,14 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/media_controller"
+        android:id="@+id/bottom_media_controller"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/colorPrimary"
         android:paddingTop="1dp">
 
         <TextView
-            android:id="@+id/media_song_title"
+            android:id="@+id/bottom_song_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
@@ -23,7 +23,7 @@
             android:textSize="15sp" />
 
         <ImageView
-            android:id="@+id/play_pause"
+            android:id="@+id/bottom_play_pause"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"

@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.textview.MaterialTextView;
 import com.pk.musicplayer.R;
 import com.pk.musicplayer.adapters.player.ExoPlayerAdapter;
+import com.pk.musicplayer.db.repositories.NowPlayingMetadataRepo;
 import com.pk.musicplayer.ui.activities.IMainActivity;
 import com.pk.musicplayer.ui.viewmodels.NowPlayingViewModel;
 
@@ -75,6 +76,10 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
 
         initNowPlayingViewModel();
+
+        // Get song metadata from NowPlayingMetadataRepo and update UI
+        MediaMetadataCompat metadata = NowPlayingMetadataRepo.getInstance().getMetadata();
+        updateNowPlayingUI(metadata);
 
     }
 
@@ -182,6 +187,11 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     }
 
     private void updateNowPlayingUI(MediaMetadataCompat metadata) {
+
+        // No song selected / playing
+        if (metadata == null)
+            return;
+
         ivSongImage.setImageBitmap(metadata.getDescription().getIconBitmap());
         tvSongTitle.setText(metadata.getDescription().getTitle());
 
